@@ -1,5 +1,6 @@
 ##pyplotping.py
-##python3 ping data RTT plotting to learn matplotlib
+##python ping data RTT plotting to learn matplotlib
+##Usage: python pyplotping.py infile
 
 import matplotlib.pyplot as plt
 import numpy as np
