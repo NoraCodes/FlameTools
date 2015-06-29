@@ -1,11 +1,25 @@
 ##pyplotping.py
 ##python ping data RTT plotting to learn matplotlib
 ##Usage: python pyplotping.py infile
+##Thanks for peakdet() go to Eli Billauer
 
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import re
+import argparse
+
+
+
+parser = argparse.ArgumentParser(description = 'pyplotping.py - Makes a pretty set of graphs from standard ping output.')
+
+parser.add_argument('--input', '-i', dest = "infile", action = "store", help = 'The file from which to read the ping data. Should contain data from exactly one ping run.')
+
+if len(sys.argv)==1:
+    parser.print_help()
+    sys.exit(1)
+
+arguments = parser.parse_args()
 
 HOST_REGEX = "(PING .* \(?([0-9]{1,3}\.){3}([0-9]{1,3})\))?"
 ADDR_REGEX = "([0-9]{1,3}\.){3}([0-9]{1,3})"
@@ -149,4 +163,4 @@ def build_graph_for_ping_file(filepath):
   
 #end build_graph_for_ping_file()
 
-build_graph_for_ping_file(sys.argv[1])
+build_graph_for_ping_file(arguments.infile)
