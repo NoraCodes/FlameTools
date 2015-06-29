@@ -25,7 +25,6 @@ HOST_REGEX = "(PING .* \(?([0-9]{1,3}\.){3}([0-9]{1,3})\))?"
 ADDR_REGEX = "([0-9]{1,3}\.){3}([0-9]{1,3})"
 DATA_REGEX = "([0-9]{1,3} byte(s)?)"
 RTT_REGEX = "(time=[0-9][0-9]\.[0-9])"
-TTL_REGEX = "(ttl=[0-9]{1,})"
  
 def peakdet(v, delta, x = None):
     """
@@ -105,7 +104,6 @@ def build_graph_for_ping_file(filepath):
   """
   content = open(filepath, 'r').read() #Grab the file
   rtt_list = []
-  ttl_list = []
   #Now find out which host we were pinging
   hostline = re.search(HOST_REGEX, content).group()
   hostlineparts = hostline.split()
@@ -121,16 +119,11 @@ def build_graph_for_ping_file(filepath):
       rttblob = re.search(RTT_REGEX, line).group()
       rtt = float(rttblob.split('=')[1])
       rtt_list.append(rtt)
-      
-      ttlblob = re.search(TTL_REGEX, line).group()
-      ttl = float(ttlblob.split('=')[1])
-      ttl_list.append(ttl)
   
   #Generate our graphs - Round Trip Time first
   plt.figure(1)
-  plt.subplot(2,1,1) #Two rows, one column, fig. 1
   plt.title("Ping times to " + host + " (" + hostaddr + "), " + str(index) + " samples.")
-  #plt.ylim(0, 120) #Set Y limits
+  plt.ylim(0, 120) #Set Y limits
   plt.xlim(0,index)    
   plt.ylabel("Round Trip Time (ms)")
   plt.xlabel("ICMP Sequence Number")
@@ -150,16 +143,8 @@ def build_graph_for_ping_file(filepath):
     rtt_minima_ypos.append(y)
   plt.plot(rtt_maxima_xpos, rtt_maxima_ypos, marker = '.', linestyle = '', color = 'g')
   plt.plot(rtt_minima_xpos, rtt_minima_ypos, marker = '.', linestyle = '', color = 'b')
-  
-  #Next, do Time To Live
-  plt.subplot(2,1,2) #2 rows, 1 column, fig. 2
-  plt.title("TTL from " + host + " (" + hostaddr + "), " + str(index) + " samples.")
-  plt.xlim(0,index)
-  plt.xlabel("ICMP Sequence Number")
-  plt.ylabel("TTL Value (hops remaining)")
-  plt.grid(True)
-  plt.plot(np.array([n for n in range (index)]), np.array(ttl_list), linestyle = '-', marker = '', color = 'g')
   plt.show()
+  
   
 #end build_graph_for_ping_file()
 
