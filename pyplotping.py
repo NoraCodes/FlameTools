@@ -24,7 +24,7 @@ arguments = parser.parse_args()
 HOST_REGEX = "(PING .* \(?([0-9]{1,3}\.){3}([0-9]{1,3})\))?"
 ADDR_REGEX = "([0-9]{1,3}\.){3}([0-9]{1,3})"
 DATA_REGEX = "([0-9]{1,3} byte(s)?)"
-RTT_REGEX = "(time=[0-9][0-9]\.[0-9])"
+RTT_REGEX = "(time=[0-9][0-9](\.)?[0-9])"
  
 def peakdet(v, delta, x = None):
     """
@@ -116,6 +116,7 @@ def build_graph_for_ping_file(filepath):
     if re.search(DATA_REGEX, line):
       index += 1
       #The line contains the correct magic, so parse
+      print("Index: " + str(index) + " for line \n" + line)
       rttblob = re.search(RTT_REGEX, line).group()
       rtt = float(rttblob.split('=')[1])
       rtt_list.append(rtt)
