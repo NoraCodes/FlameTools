@@ -116,7 +116,7 @@ def build_graph_for_ping_file(filepath):
     if re.search(DATA_REGEX, line):
       index += 1
       #The line contains the correct magic, so parse
-      print("Index: " + str(index) + " for line \n" + line)
+      #print("Index: " + str(index) + " for line \n" + line)
       rttblob = re.search(RTT_REGEX, line).group()
       rtt = float(rttblob.split('=')[1])
       rtt_list.append(rtt)
